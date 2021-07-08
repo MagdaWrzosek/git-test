@@ -28,19 +28,17 @@ bool isInRange(const Range &range, const int &value) {
     return value >= range.min && value <= range.max;
 }
 
-/**
- * Validates if given triplet of numbers can be correct date.
- * Prints verbose error to 'std:cerr' if givan values are exceeding their rages.
- * @param [in] day Integer value to be validated if within DAY_RANGE
- * @param [in] month Integer value to be validated if within `MONTH_RANGE`
- * @param [in] year Integer value to be validated if within `YEAR_RANGE`
- * @param [in] dayRange Range value describing possible values for day
- * @param [in] monthRange Range value describing possible values for month
- * @param [in] yearRange Range value describing possible values for year
- * @return true if all three validation are passed `false` otherwise
- */
-bool
-validateDate(const Date& date, Range dayRange, Range monthRange, Range yearRange) {
+
+ /**
+  * Validate if given date has day, month and year in correct ranges.
+  * Prints verbose error to 'std:cerr' if givan values are exceeding their rages.
+  * @param date Date to be validated
+  * @param dayRange Range value describing possible values for day
+  * @param monthRange Range value describing possible values for day
+  * @param yearRange Range value describing possible values for year
+  * @return true if all three validation are passed `false` otherwise
+  */
+bool validateDate(const Date& date, Range dayRange, Range monthRange, Range yearRange) {
     bool isDayInRage = isInRange(dayRange, date.day);
     bool isMonthInRage = isInRange(monthRange, date.month);
     bool isYearInRange = isInRange(yearRange, date.year);
@@ -71,6 +69,13 @@ bool isLeapYear(const int &year) {
     return year % 4 == 0;
 }
 
+/**
+ * Function that computes numbers of day in month. Leap year are taken into consideration.
+ * This is version utilizes std::map
+ * @param month Integers describing
+ * @param year Integer value
+ * @return numbers of day in month
+ */
 int getNumberOfDaysInMonthMap(const int &month, const int &year) {
     std::map<int, int> monthsToDays = {{1,  31},
                                        {2,  isLeapYear(year) ? 29 : 28},
@@ -86,7 +91,13 @@ int getNumberOfDaysInMonthMap(const int &month, const int &year) {
                                        {12, 31}};
     return monthsToDays.at(month);
 }
-
+/**
+ * Validates number od days in month.
+ * Assumes that year and month is correct.
+ * Prints error to 'std:cerr' if number of day is incorrect.
+ * @param date Date object to be validated
+ * @return true if date is correct in terms od papal Bull, false otherwise
+ */
 bool validateDatePapalBull(const Date& date) {
     int maxNumberOfDays = getNumberOfDaysInMonthMap(date.month, date.year);
     bool isNumberOfDaysCorrect = date.day <= maxNumberOfDays;
@@ -97,6 +108,12 @@ bool validateDatePapalBull(const Date& date) {
     return isNumberOfDaysCorrect;
 }
 
+/**
+ * Function that computes date next day.
+ * Function assume that date is correct
+ * @param date Date to be consider start
+ * @return Date that is one day ahead of given one
+ */
 Date computeDateNextDay(const Date& date){
     Date dateNextDay = Date(date);
     if(date.day== getNumberOfDaysInMonthMap(date.month,date.year)){
@@ -112,12 +129,15 @@ Date computeDateNextDay(const Date& date){
     return dateNextDay;
 }
 
+/**
+ * Prints given data to std:cout in YYYY-MM-DD format
+ * @param date
+ */
 void printDate(Date date){
     std::cout<<std::setw(4)<<date.year
     <<"-"<<std::setw(2)<<std::setfill('0')<<date.month
     <<"-"<<std::setw(2)<<std::setfill('0')<<date.day;
 }
-
 
 
 int main() {

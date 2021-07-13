@@ -1,0 +1,1 @@
+add_executable(dateNextDay dateNextDayMagda.cpp)
